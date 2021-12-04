@@ -1,16 +1,5 @@
-import logging
 from rich import print
 from numpy import array
-
-import logging
-from rich.logging import RichHandler
-
-logging.basicConfig(
-    level="INFO", datefmt="[%X]", handlers=[RichHandler()]
-)
-
-log = logging.getLogger('rich')
-
 
 with open('inputs/day4_testcase_draw.txt') as file:
     txt = file.read()
@@ -51,7 +40,7 @@ class BingoCard:
             self.card[row][col] = 'X'
             self._card_status[row][col] = True
         else:
-            log.debug("No indices returned")
+            return
 
     def _update_card_status(self, row_pos, col_pos):
         self._card_status[row_pos][col_pos] = True
@@ -83,32 +72,16 @@ if __name__ == '__main__':
     ]
 
     for draw in draws:
-        log.debug(f"MAIN: DRAW: {draw=}")
-        
-        for idx, card in enumerate(BingoCards):
+
+        enumerate_this = list(BingoCards)
+        for idx, card in enumerate(enumerate_this):
             bingo = False
-            if draw==13:
-                log.debug("Start of 13!!!")
-
-            if draw==16:
-                log.setLevel(logging.DEBUG)
-            else:
-                log.setLevel(logging.INFO)
-
-            
-            log.debug(f"Looping over BingoCard, {(idx)=} out of {len(BingoCards)-1}")
-            log.debug(f"MAIN: DRAW: {draw=}, {idx=}")
 
             card.update(draw)
             row, bingo = card.check_bingo()
 
-            log.debug(f"MAIN: {row=}, {bingo=}\n~~~~~~~~~~\n")
-
             if bingo:
-                log.debug(f"BINGO!!! {idx=}")
-                winner = BingoCards[idx]
-                log.debug(winner)
-                log.debug(f"Remaining cards (before pop): {len(BingoCards) = }")
+                winner = BingoCards.pop(idx)
 
                 flattened = [
                     [item for item in row if str(item).isdigit()]
@@ -116,10 +89,5 @@ if __name__ == '__main__':
                 ]
 
                 total = list(map(sum, flattened))
-                print(f"{sum(total)=}, {draw=},{sum(total) * draw = }")
+                print(f"{idx=}, {len(BingoCards)=}, {sum(total)=}, {draw=},{sum(total) * draw = }")
                 
-                el = BingoCards.pop(idx)
-                log.debug(f"Remaining cards (after pop): {len(BingoCards) = }")
-                if len(BingoCards) == 1:
-                    log.debug("Last one:")
-                    log.debug(BingoCards[0])
