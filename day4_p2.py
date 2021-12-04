@@ -71,11 +71,9 @@ if __name__ == '__main__':
         BingoCard(i) for i in cards
     ]
 
-    bingo_cards: dict = dict(zip(range(len(BingoCards)), BingoCards))
-
     for draw in draws:
 
-        for idx, card in bingo_cards.items():
+        for idx, card in enumerate(BingoCards):
             bingo = False
 
             if card is not None:
@@ -83,7 +81,7 @@ if __name__ == '__main__':
                 row, bingo = card.check_bingo()
 
             if bingo:
-                winner = bingo_cards[idx]
+                winner = BingoCards[idx]
 
                 flattened = [
                     [item for item in row if str(item).isdigit()]
@@ -93,4 +91,4 @@ if __name__ == '__main__':
                 total = list(map(sum, flattened))
                 print(f"{idx=}, {len(BingoCards)=}, {sum(total)=}, {draw=},{sum(total) * draw = }")
 
-                bingo_cards[idx] = None
+                BingoCards[idx] = None
