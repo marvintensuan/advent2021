@@ -1,13 +1,13 @@
-from rich import print
 from numpy import array
 
 with open('inputs/day4_draw.txt') as file:
     txt = file.read()
-    draws = tuple(map(int,txt.split(sep=',')))
+    draws = tuple(map(int, txt.split(sep=',')))
 
 with open('inputs/day4_cards.txt') as file:
     txt = file.read()
-    cards = tuple(map(str,txt.split(sep='\n\n')))
+    cards = tuple(map(str, txt.split(sep='\n\n')))
+
 
 class BingoCard:
     def __init__(self, card_data: str):
@@ -15,7 +15,7 @@ class BingoCard:
             [int(item) for item in row.split(' ') if item != '']
             for row in card_data.split('\n')
         ]
-        
+
         self._card_status = array([[False for _ in row] for row in self._data])
 
         self.card = [
@@ -26,10 +26,11 @@ class BingoCard:
     def __str__(self):
         return '\n'.join(
             [
-                ', '.join([f"{item:>2}" for item in row]) 
+                ', '.join([f"{item:>2}" for item in row])
                 for row in self.card
             ]
         )
+
     def __repr__(self):
         return self.__str__()
 
@@ -66,7 +67,7 @@ class BingoCard:
 
 
 if __name__ == '__main__':
-    
+
     BingoCards: list = [
         BingoCard(i) for i in cards
     ]
@@ -89,6 +90,6 @@ if __name__ == '__main__':
                 ]
 
                 total = list(map(sum, flattened))
-                print(f"{idx=}, {len(BingoCards)=}, {sum(total)=}, {draw=},{sum(total) * draw = }")
+                print(f"{sum(total)=}, {draw=},{sum(total) * draw = }")
 
                 BingoCards[idx] = None
