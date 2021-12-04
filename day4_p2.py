@@ -1,11 +1,11 @@
 from rich import print
 from numpy import array
 
-with open('inputs/day4_testcase_draw.txt') as file:
+with open('inputs/day4_draw.txt') as file:
     txt = file.read()
     draws = tuple(map(int,txt.split(sep=',')))
 
-with open('inputs/day4_testcase_cards.txt') as file:
+with open('inputs/day4_cards.txt') as file:
     txt = file.read()
     cards = tuple(map(str,txt.split(sep='\n\n')))
 
@@ -71,17 +71,19 @@ if __name__ == '__main__':
         BingoCard(i) for i in cards
     ]
 
+    bingo_cards: dict = dict(zip(range(len(BingoCards)), BingoCards))
+
     for draw in draws:
 
-        enumerate_this = list(BingoCards)
-        for idx, card in enumerate(enumerate_this):
+        for idx, card in bingo_cards.items():
             bingo = False
 
-            card.update(draw)
-            row, bingo = card.check_bingo()
+            if card is not None:
+                card.update(draw)
+                row, bingo = card.check_bingo()
 
             if bingo:
-                winner = BingoCards.pop(idx)
+                winner = bingo_cards[idx]
 
                 flattened = [
                     [item for item in row if str(item).isdigit()]
@@ -90,4 +92,5 @@ if __name__ == '__main__':
 
                 total = list(map(sum, flattened))
                 print(f"{idx=}, {len(BingoCards)=}, {sum(total)=}, {draw=},{sum(total) * draw = }")
-                
+
+                bingo_cards[idx] = None
