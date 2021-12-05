@@ -4,4 +4,6 @@ Scripts
 **__pycache__**
 pyvenv.cfg
 
+# IDEs
+.idea
 .vscode
